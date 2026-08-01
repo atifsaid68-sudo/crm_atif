@@ -20,6 +20,14 @@ npm run dev
 
 Ouvrir [http://localhost:3000](http://localhost:3000). Aucune configuration externe n'est nécessaire : la base de données locale est un simple fichier SQLite (`prisma/dev.db`, créé automatiquement).
 
+## Données de démonstration
+
+```bash
+npx tsx prisma/seed.ts
+```
+
+Crée 5 sociétés clientes fictives (préfixées `[Démo]`) avec organigrammes, classification des emplois et fiches de poste, pour explorer l'application avec des données réalistes. Pour les supprimer, ouvrez chaque société de démo dans l'interface et cliquez sur "Supprimer la société" (icône corbeille) — la suppression est en cascade.
+
 ## Passer en production (Supabase + Vercel, gratuit)
 
 1. Créer un projet gratuit sur [supabase.com](https://supabase.com) et récupérer la chaîne de connexion Postgres.

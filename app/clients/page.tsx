@@ -14,9 +14,8 @@ import {
 } from "@/components/ui/dialog";
 
 function initials(nom: string) {
-  return nom
-    .split(/\s+/)
-    .filter(Boolean)
+  const clean = nom.replace(/\[[^\]]*\]|\([^)]*\)/g, " ");
+  return (clean.match(/\p{L}+/gu) ?? [])
     .slice(0, 2)
     .map((w) => w[0]!.toUpperCase())
     .join("");
