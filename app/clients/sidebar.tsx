@@ -23,7 +23,7 @@ export function ClientsSidebar({ clients }: { clients: SidebarClient[] }) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground">
+    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
       <div className="flex items-center gap-2.5 px-5 py-6">
         <div className="flex size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
           <Building2 className="size-4.5" strokeWidth={2.5} />
