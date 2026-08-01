@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
+import { ArrowLeft, Save } from "lucide-react";
 
 export default async function FicheDePostePage({
   params,
@@ -28,21 +29,23 @@ export default async function FicheDePostePage({
       <div>
         <Link
           href={`/clients/${id}/postes`}
-          className="text-sm text-zinc-500 hover:underline"
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
-          ← Fiches de poste
+          <ArrowLeft className="size-3.5" />
+          Fiches de poste
         </Link>
-        <h2 className="mt-2 text-xl font-semibold">{position.titre}</h2>
-        <p className="text-sm text-zinc-500">
-          {position.jobFamily?.nom}
-          {position.niveau ? ` · ${position.niveau}` : ""}
+        <h2 className="mt-3 font-heading text-2xl font-semibold tracking-tight">
+          {position.titre}
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          {[position.jobFamily?.nom, position.niveau].filter(Boolean).join(" · ")}
           {position.reportsTo ? ` · rattaché à ${position.reportsTo.titre}` : ""}
         </p>
       </div>
 
       <form
         action={saveJobDescription.bind(null, id, positionId)}
-        className="space-y-4"
+        className="space-y-5 rounded-2xl border border-border bg-card p-6"
       >
         <div className="space-y-1.5">
           <Label htmlFor="missions">Missions</Label>
@@ -75,13 +78,18 @@ export default async function FicheDePostePage({
             <option value="VALIDE">Validée</option>
           </NativeSelect>
         </div>
-        <Button type="submit">Enregistrer</Button>
-        {fiche && (
-          <p className="text-xs text-zinc-500">
-            Version actuelle : {fiche.version} — dernière mise à jour le{" "}
-            {fiche.updatedAt.toLocaleDateString("fr-FR")}
-          </p>
-        )}
+        <div className="flex items-center justify-between border-t border-border pt-4">
+          <Button type="submit">
+            <Save className="size-3.5" />
+            Enregistrer
+          </Button>
+          {fiche && (
+            <p className="text-xs text-muted-foreground">
+              Version {fiche.version} — mise à jour le{" "}
+              {fiche.updatedAt.toLocaleDateString("fr-FR")}
+            </p>
+          )}
+        </div>
       </form>
     </div>
   );

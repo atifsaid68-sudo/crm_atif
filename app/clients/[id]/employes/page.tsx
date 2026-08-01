@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { NativeSelect } from "@/components/ui/native-select";
+import { UserPlus, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -42,11 +43,18 @@ export default async function EmployesPage({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-muted-foreground">
           {employees.length} employé{employees.length > 1 ? "s" : ""}
         </p>
         <Dialog>
-          <DialogTrigger render={<Button size="sm">Ajouter un employé</Button>} />
+          <DialogTrigger
+            render={
+              <Button size="sm">
+                <UserPlus className="size-3.5" />
+                Ajouter un employé
+              </Button>
+            }
+          />
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Nouvel employé</DialogTitle>
@@ -101,51 +109,58 @@ export default async function EmployesPage({
       </div>
 
       {employees.length === 0 ? (
-        <p className="text-sm text-zinc-500">Aucun employé.</p>
+        <p className="text-sm text-muted-foreground">Aucun employé.</p>
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nom</TableHead>
-              <TableHead>Poste</TableHead>
-              <TableHead>Manager</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Embauche</TableHead>
-              <TableHead />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {employees.map((e) => (
-              <TableRow key={e.id}>
-                <TableCell className="font-medium">
-                  {e.prenom} {e.nom}
-                </TableCell>
-                <TableCell>{e.position?.titre ?? "—"}</TableCell>
-                <TableCell>
-                  {e.manager ? `${e.manager.prenom} ${e.manager.nom}` : "—"}
-                </TableCell>
-                <TableCell>{e.email ?? "—"}</TableCell>
-                <TableCell>
-                  {e.dateEmbauche
-                    ? e.dateEmbauche.toLocaleDateString("fr-FR")
-                    : "—"}
-                </TableCell>
-                <TableCell>
-                  <form action={deleteEmployee.bind(null, id, e.id)}>
-                    <Button
-                      type="submit"
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      Supprimer
-                    </Button>
-                  </form>
-                </TableCell>
+        <div className="overflow-hidden rounded-2xl border border-border bg-card">
+          <Table>
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead>Nom</TableHead>
+                <TableHead>Poste</TableHead>
+                <TableHead>Manager</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Embauche</TableHead>
+                <TableHead />
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {employees.map((e) => (
+                <TableRow key={e.id}>
+                  <TableCell className="font-medium">
+                    {e.prenom} {e.nom}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {e.position?.titre ?? "—"}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {e.manager ? `${e.manager.prenom} ${e.manager.nom}` : "—"}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {e.email ?? "—"}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {e.dateEmbauche
+                      ? e.dateEmbauche.toLocaleDateString("fr-FR")
+                      : "—"}
+                  </TableCell>
+                  <TableCell>
+                    <form action={deleteEmployee.bind(null, id, e.id)}>
+                      <Button
+                        type="submit"
+                        variant="ghost"
+                        size="icon"
+                        className="size-7 text-muted-foreground hover:text-destructive"
+                        aria-label="Supprimer"
+                      >
+                        <X className="size-3.5" />
+                      </Button>
+                    </form>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       )}
     </div>
   );

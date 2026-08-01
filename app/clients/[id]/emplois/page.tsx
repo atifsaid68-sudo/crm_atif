@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { NativeSelect } from "@/components/ui/native-select";
+import { Layers3, Briefcase, Plus, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -42,11 +43,15 @@ export default async function EmploisPage({
     <div className="space-y-10">
       <section>
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Familles de métiers</h2>
+          <h2 className="flex items-center gap-2 font-heading text-lg font-medium">
+            <Layers3 className="size-4.5 text-primary" />
+            Familles de métiers
+          </h2>
           <Dialog>
             <DialogTrigger
               render={
                 <Button variant="outline" size="sm">
+                  <Plus className="size-3.5" />
                   Nouvelle famille
                 </Button>
               }
@@ -73,41 +78,56 @@ export default async function EmploisPage({
         </div>
 
         {jobFamilies.length === 0 ? (
-          <p className="mt-3 text-sm text-zinc-500">Aucune famille de métiers.</p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Aucune famille de métiers.
+          </p>
         ) : (
-          <ul className="mt-3 space-y-2">
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {jobFamilies.map((f) => (
-              <li
+              <div
                 key={f.id}
-                className="flex items-center justify-between rounded-lg border border-zinc-200 px-4 py-2 dark:border-zinc-800"
+                className="flex items-start justify-between rounded-xl border border-border bg-card px-4 py-3"
               >
                 <div>
                   <p className="text-sm font-medium">{f.nom}</p>
                   {f.description && (
-                    <p className="text-xs text-zinc-500">{f.description}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {f.description}
+                    </p>
                   )}
                 </div>
                 <form action={deleteJobFamily.bind(null, id, f.id)}>
                   <Button
                     type="submit"
                     variant="ghost"
-                    size="sm"
-                    className="text-red-600 hover:text-red-700"
+                    size="icon"
+                    className="size-7 shrink-0 text-muted-foreground hover:text-destructive"
+                    aria-label="Supprimer"
                   >
-                    Supprimer
+                    <X className="size-3.5" />
                   </Button>
                 </form>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </section>
 
       <section>
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Postes</h2>
+          <h2 className="flex items-center gap-2 font-heading text-lg font-medium">
+            <Briefcase className="size-4.5 text-primary" />
+            Postes
+          </h2>
           <Dialog>
-            <DialogTrigger render={<Button size="sm">Nouveau poste</Button>} />
+            <DialogTrigger
+              render={
+                <Button size="sm">
+                  <Plus className="size-3.5" />
+                  Nouveau poste
+                </Button>
+              }
+            />
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Nouveau poste</DialogTitle>
@@ -156,19 +176,21 @@ export default async function EmploisPage({
         </div>
 
         {positions.length === 0 ? (
-          <p className="mt-3 text-sm text-zinc-500">Aucun poste.</p>
+          <p className="mt-3 text-sm text-muted-foreground">Aucun poste.</p>
         ) : (
-          <ul className="mt-3 space-y-2">
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {positions.map((p) => (
-              <li
+              <div
                 key={p.id}
-                className="flex items-center justify-between rounded-lg border border-zinc-200 px-4 py-2 dark:border-zinc-800"
+                className="flex items-start justify-between rounded-xl border border-border bg-card px-4 py-3"
               >
                 <div>
                   <p className="text-sm font-medium">{p.titre}</p>
-                  <div className="mt-1 flex flex-wrap gap-1.5 text-xs text-zinc-500">
+                  <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
                     {p.niveau && <Badge variant="secondary">{p.niveau}</Badge>}
-                    {p.jobFamily && <Badge variant="secondary">{p.jobFamily.nom}</Badge>}
+                    {p.jobFamily && (
+                      <Badge variant="secondary">{p.jobFamily.nom}</Badge>
+                    )}
                     {p.reportsTo && <span>rattaché à {p.reportsTo.titre}</span>}
                   </div>
                 </div>
@@ -176,15 +198,16 @@ export default async function EmploisPage({
                   <Button
                     type="submit"
                     variant="ghost"
-                    size="sm"
-                    className="text-red-600 hover:text-red-700"
+                    size="icon"
+                    className="size-7 shrink-0 text-muted-foreground hover:text-destructive"
+                    aria-label="Supprimer"
                   >
-                    Supprimer
+                    <X className="size-3.5" />
                   </Button>
                 </form>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </section>
     </div>

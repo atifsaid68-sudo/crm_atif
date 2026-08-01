@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
+import { Network, UserPlus, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +20,10 @@ type EmployeeWithPosition = {
   managerId: string | null;
   position: { titre: string } | null;
 };
+
+function initials(prenom: string, nom: string) {
+  return `${prenom[0] ?? ""}${nom[0] ?? ""}`.toUpperCase();
+}
 
 function buildTree(employees: EmployeeWithPosition[]) {
   const byManager = new Map<string | null, EmployeeWithPosition[]>();
@@ -39,17 +44,24 @@ function OrgNode({
 }) {
   const children = byManager.get(employee.id) ?? [];
   return (
-    <li>
-      <div className="inline-block rounded-lg border border-zinc-200 bg-white px-3 py-2 dark:border-zinc-800 dark:bg-zinc-950">
-        <p className="text-sm font-medium">
-          {employee.prenom} {employee.nom}
-        </p>
-        {employee.position && (
-          <p className="text-xs text-zinc-500">{employee.position.titre}</p>
-        )}
+    <li className="relative">
+      <div className="inline-flex items-center gap-3 rounded-xl border border-border bg-card px-3.5 py-2.5 shadow-sm transition-shadow hover:shadow-md">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+          {initials(employee.prenom, employee.nom)}
+        </span>
+        <div>
+          <p className="text-sm font-medium leading-tight">
+            {employee.prenom} {employee.nom}
+          </p>
+          {employee.position && (
+            <p className="text-xs text-muted-foreground">
+              {employee.position.titre}
+            </p>
+          )}
+        </div>
       </div>
       {children.length > 0 && (
-        <ul className="ml-6 mt-2 space-y-2 border-l border-zinc-200 pl-6 dark:border-zinc-800">
+        <ul className="ml-[18px] mt-2 space-y-2 border-l-2 border-dashed border-border pl-8">
           {children.map((child) => (
             <OrgNode key={child.id} employee={child} byManager={byManager} />
           ))}
@@ -82,13 +94,21 @@ export default async function OrganigrammePage({
   const roots = byManager.get(null) ?? [];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-zinc-500">
+        <p className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Network className="size-4" />
           Vue nominative — les employés sont rattachés à leur manager direct.
         </p>
         <Dialog>
-          <DialogTrigger render={<Button>Ajouter un employé</Button>} />
+          <DialogTrigger
+            render={
+              <Button>
+                <UserPlus className="size-4" />
+                Ajouter un employé
+              </Button>
+            }
+          />
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Nouvel employé</DialogTitle>
@@ -146,49 +166,60 @@ export default async function OrganigrammePage({
       </div>
 
       {employees.length === 0 ? (
-        <p className="text-sm text-zinc-500">
-          Aucun employé pour l&apos;instant. Ajoutez-en un pour démarrer
-          l&apos;organigramme.
-        </p>
+        <div className="rounded-2xl border border-dashed border-border py-16 text-center">
+          <Network className="mx-auto size-8 text-muted-foreground/40" />
+          <p className="mt-3 text-sm text-muted-foreground">
+            Aucun employé pour l&apos;instant. Ajoutez-en un pour démarrer
+            l&apos;organigramme.
+          </p>
+        </div>
       ) : (
-        <ul className="space-y-2">
-          {roots.map((root) => (
-            <OrgNode key={root.id} employee={root} byManager={byManager} />
-          ))}
-        </ul>
+        <div className="overflow-x-auto rounded-2xl border border-border bg-muted/30 p-6">
+          <ul className="space-y-3">
+            {roots.map((root) => (
+              <OrgNode key={root.id} employee={root} byManager={byManager} />
+            ))}
+          </ul>
+        </div>
       )}
 
       {employees.length > 0 && (
-        <details className="mt-8">
-          <summary className="cursor-pointer text-sm text-zinc-500">
-            Gérer / supprimer des employés
-          </summary>
-          <ul className="mt-3 space-y-1">
+        <div>
+          <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Tous les employés
+          </p>
+          <ul className="divide-y divide-border rounded-xl border border-border">
             {employees.map((e) => (
               <li
                 key={e.id}
-                className="flex items-center justify-between text-sm"
+                className="flex items-center justify-between px-4 py-2.5 text-sm"
               >
-                <span>
+                <span className="flex items-center gap-2.5">
+                  <span className="flex size-6 items-center justify-center rounded-full bg-muted text-[10px] font-medium text-muted-foreground">
+                    {initials(e.prenom, e.nom)}
+                  </span>
                   {e.prenom} {e.nom}
                   {e.position && (
-                    <span className="text-zinc-500"> — {e.position.titre}</span>
+                    <span className="text-muted-foreground">
+                      — {e.position.titre}
+                    </span>
                   )}
                 </span>
                 <form action={deleteEmployee.bind(null, id, e.id)}>
                   <Button
                     type="submit"
                     variant="ghost"
-                    size="sm"
-                    className="text-red-600 hover:text-red-700"
+                    size="icon"
+                    className="size-7 text-muted-foreground hover:text-destructive"
+                    aria-label="Supprimer"
                   >
-                    Supprimer
+                    <X className="size-3.5" />
                   </Button>
                 </form>
               </li>
             ))}
           </ul>
-        </details>
+        </div>
       )}
     </div>
   );

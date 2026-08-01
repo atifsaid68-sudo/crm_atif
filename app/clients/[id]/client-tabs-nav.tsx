@@ -3,33 +3,36 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Network, Layers3, FileText, Users2 } from "lucide-react";
 
 const TABS = [
-  { segment: "organigramme", label: "Organigramme" },
-  { segment: "emplois", label: "Classification des emplois" },
-  { segment: "postes", label: "Fiches de poste" },
-  { segment: "employes", label: "Employés" },
+  { segment: "organigramme", label: "Organigramme", icon: Network },
+  { segment: "emplois", label: "Classification des emplois", icon: Layers3 },
+  { segment: "postes", label: "Fiches de poste", icon: FileText },
+  { segment: "employes", label: "Employés", icon: Users2 },
 ];
 
 export function ClientTabsNav({ clientId }: { clientId: string }) {
   const pathname = usePathname();
 
   return (
-    <nav className="mt-6 flex gap-1 border-b border-zinc-200 dark:border-zinc-800">
+    <nav className="flex flex-wrap gap-1.5">
       {TABS.map((tab) => {
         const href = `/clients/${clientId}/${tab.segment}`;
         const active = pathname.startsWith(href);
+        const Icon = tab.icon;
         return (
           <Link
             key={tab.segment}
             href={href}
             className={cn(
-              "px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors",
+              "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors",
               active
-                ? "border-zinc-900 text-zinc-900 dark:border-zinc-100 dark:text-zinc-100"
-                : "border-transparent text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100",
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
             )}
           >
+            <Icon className="size-3.5" />
             {tab.label}
           </Link>
         );
