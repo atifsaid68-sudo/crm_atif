@@ -44,13 +44,13 @@ function OrgNode({
 }) {
   const children = byManager.get(employee.id) ?? [];
   return (
-    <li className="relative">
-      <div className="inline-flex items-center gap-3 rounded-xl border border-border bg-card px-3.5 py-2.5 shadow-sm transition-shadow hover:shadow-md">
+    <li>
+      <div className="inline-flex min-w-[168px] flex-col items-center gap-1.5 rounded-xl border border-border bg-card px-3.5 py-2.5 shadow-sm transition-shadow hover:shadow-md">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
           {initials(employee.prenom, employee.nom)}
         </span>
         <div>
-          <p className="text-sm font-medium leading-tight">
+          <p className="text-sm font-medium leading-tight whitespace-nowrap">
             {employee.prenom} {employee.nom}
           </p>
           {employee.position && (
@@ -61,7 +61,7 @@ function OrgNode({
         </div>
       </div>
       {children.length > 0 && (
-        <ul className="ml-[18px] mt-2 space-y-2 border-l-2 border-dashed border-border pl-8">
+        <ul>
           {children.map((child) => (
             <OrgNode key={child.id} employee={child} byManager={byManager} />
           ))}
@@ -174,8 +174,8 @@ export default async function OrganigrammePage({
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-border bg-muted/30 p-6">
-          <ul className="space-y-3">
+        <div className="overflow-x-auto rounded-2xl border border-border bg-muted/30 p-8">
+          <ul className="org-tree">
             {roots.map((root) => (
               <OrgNode key={root.id} employee={root} byManager={byManager} />
             ))}

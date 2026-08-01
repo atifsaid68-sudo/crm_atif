@@ -128,3 +128,74 @@
     @apply font-sans;
   }
 }
+
+/* Vertical org chart: parent on top, children in a row below, connected by lines. */
+.org-tree,
+.org-tree ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.org-tree li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.org-tree ul li {
+  position: relative;
+  padding: 2rem 0.75rem 0 0.75rem;
+}
+
+.org-tree ul li::before,
+.org-tree ul li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 50%;
+  width: 50%;
+  height: 2rem;
+  border-top: 2px solid var(--border);
+}
+
+.org-tree ul li::after {
+  right: auto;
+  left: 50%;
+  border-left: 2px solid var(--border);
+}
+
+.org-tree ul li:only-child {
+  padding-top: 0;
+}
+
+.org-tree ul li:only-child::before,
+.org-tree ul li:only-child::after {
+  display: none;
+}
+
+.org-tree ul li:first-child::before,
+.org-tree ul li:last-child::after {
+  border: 0 none;
+}
+
+.org-tree ul li:last-child::before {
+  border-right: 2px solid var(--border);
+  border-radius: 0 6px 0 0;
+}
+
+.org-tree ul li:first-child::after {
+  border-radius: 6px 0 0 0;
+}
+
+.org-tree ul::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2rem;
+  margin: 0 auto;
+  border-left: 2px solid var(--border);
+}
